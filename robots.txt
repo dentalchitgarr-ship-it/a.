@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://CHANGE-ME.ir/sitemap.xml
+Sitemap: https://chitgardental.ir/sitemap.xml
