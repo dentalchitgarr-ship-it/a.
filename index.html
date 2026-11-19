@@ -255,7 +255,7 @@ function loadSet(){const k=innerWidth<768?'m':'d';if(set.k===k)return;set=[];set
 function size(){const r=Math.min(devicePixelRatio||1,1.5);cv.width=innerWidth*r;cv.height=innerHeight*r;cv._w=innerWidth;cv._h=innerHeight;paint()}
 function cover(im){const W=cv.width,H=cv.height,s=Math.max(W/im.naturalWidth,H/im.naturalHeight),w=im.naturalWidth*s,h=im.naturalHeight*s;cx.drawImage(im,(W-w)/2,(H-h)/2,w,h)}
 function ok(i){return set[i]&&set[i].complete&&set[i].naturalWidth}
-function paint(){const n=set.length;if(!n)return;const f=pos*(n-1),i=Math.floor(f),a=f-i;let b=i;while(b>0&&!ok(b))b--;if(!ok(b))return;cx.globalAlpha=1;cover(set[b]);if(a>.01&&i<n-1&&ok(i+1)){cx.globalAlpha=a;cover(set[i+1]);cx.globalAlpha=1}}
+function paint(){const n=set.length;if(!n)return;const f=Math.round(pos*(n-1));let b=f;while(b>0&&!ok(b))b--;if(!ok(b)){b=f;while(b<n-1&&!ok(b))b++}if(!ok(b))return;cx.imageSmoothingEnabled=true;cx.imageSmoothingQuality='high';cx.globalAlpha=1;cover(set[b])}
 function tick(ts){const dt=Math.min(.05,(ts-(last||ts))/1000||.016);last=ts;const d=target-pos;if(Math.abs(d)<.00003){pos=target;raf=0;last=0}else{pos+=d*(1-Math.exp(-dt*5.2));raf=requestAnimationFrame(tick)}paint()}
 function onScroll(){const m=document.documentElement.scrollHeight-innerHeight;target=m>0?Math.min(1,Math.max(0,scrollY/m)):0;if(!raf)raf=requestAnimationFrame(tick)}
 addEventListener('scroll',onScroll,{passive:true});
