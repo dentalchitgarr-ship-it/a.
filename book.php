@@ -19,11 +19,12 @@ $l[]=['id'=>bin2hex(random_bytes(6)),'code'=>$code,'t'=>date('Y-m-d H:i'),'name'
 ftruncate($fp,0);rewind($fp);fwrite($fp,json_encode($l,JSON_UNESCAPED_UNICODE));flock($fp,LOCK_UN);fclose($fp);
 
 /* Optional automatic SMS to the clinic (Kavenegar). Create data/sms.json:
-   {"apikey":"...","receptor":"09xxxxxxxxx","sender":""}   (sender optional) */
+   {"apikey":"...","receptor":"09380240114","sender":""}   (receptor/sender optional) */
 $sf=$data.'/sms.json';
 if(is_file($sf)){
   $c=json_decode((string)file_get_contents($sf),true);
-  if(is_array($c)&&!empty($c['apikey'])&&!empty($c['receptor'])){
+  if(is_array($c)&&!empty($c['apikey'])){
+    if(empty($c['receptor']))$c['receptor']='09380240114';
     $msg="نوبت جدید دیار دنت\n".$name.' - '.$phone."\n".$svc."\n".trim($dayLabel.' '.$slotLabel).($note!==''?"\n".$note:'')."\nکد: ".$code;
     $q=['receptor'=>$c['receptor'],'message'=>$msg];if(!empty($c['sender']))$q['sender']=$c['sender'];
     $url='https://api.kavenegar.com/v1/'.rawurlencode($c['apikey']).'/sms/send.json?'.http_build_query($q);
